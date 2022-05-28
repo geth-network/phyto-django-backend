@@ -1,0 +1,26 @@
+{% load sitetree %}
+{% load static %}
+
+
+{% block menu %}
+<div class="menu">
+    <link rel="stylesheet" type="text/css" href="{% static 'phyto_backend/menu.css' %}" >
+    <header class="logo-wrapper">
+        <h1 class="logo">
+            <a href="/"><span>Phyto-Segment</span></a>
+            <hr>
+            <small style="color:white;">
+                {% if user.last_name %}
+                    {{ user.first_name }} {{ user.last_name }}
+                {% else %}
+                    {{ user.username }}
+                {% endif %}
+            </small>
+        </h1>
+    </header>
+
+        <div class="msg">
+            {% sitetree_menu from "main-menu" include "trunk, topmenu" %}
+        </div>
+</div>
+{% endblock %}

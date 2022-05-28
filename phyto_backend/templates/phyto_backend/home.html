@@ -1,0 +1,15 @@
+{% extends 'phyto_backend/base.html' %}
+
+
+{% block content %}
+<div align="center" style="margin-top:20px; font: 100% Arial;"> <h1> Welcome to PHYTO-SEGMENT</h1>
+    <br>
+    <h2>
+        {% if user.is_authenticated %}
+        You was authenticated as <u>{{user.username}}</u>
+        {% else %}
+        You are not authenticated, please <a href="/login">Log in</a>
+        {% endif %}
+    </h2>
+</div>
+{% endblock %}

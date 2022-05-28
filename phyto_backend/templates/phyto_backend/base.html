@@ -1,0 +1,22 @@
+{% load static %}
+{% load sitetree %}
+<html>
+    <head>
+        <title>PHYTOSEGMENT</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    </head>
+    <body>
+        {% include  "phyto_backend/menu.html" %}
+        <link rel="stylesheet" type="text/css" href="{% static 'phyto_backend/base_custom.css' %}">
+        <div class="content container" style="display: table-cell; width: 100%;height:100%;">
+            <div class="col-md-8">
+                {% block content %} {% endblock %}
+                {% block footer %} {% endblock %}
+            </div>
+        </div>
+        {% block js %}
+            <script src="https://code.jquery.com/jquery-2.0.2.min.js"></script>
+        {% endblock %}
+        {% block extrajs %} {% endblock %}
+    </body>
+</html>

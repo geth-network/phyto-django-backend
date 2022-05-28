@@ -1,0 +1,21 @@
+{% extends 'phyto_backend/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'phyto_backend/auth.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+
+<form method="post" style="height: 430px;">
+    <div class="formcontainer">
+        <h2>Login</h2>
+        <hr/>
+      <div class="container">
+          {% csrf_token %}
+          {{ form.as_p }}
+      </div>
+        <button type="submit" name="Login">Login</button><p></p>
+        <center><a href="/signup">Registration</a></center>
+    </div>
+</form>
+{% endblock %}

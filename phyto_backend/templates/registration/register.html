@@ -1,0 +1,26 @@
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'phyto_backend/auth.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+<form method="post">
+    <div class="formcontainer">
+        <h2>Registration</h2>
+        <hr/>
+      <div class="container">
+        {% csrf_token %}
+          {{ form.as_p }}
+      </div>
+        <button type="submit">Registration</button>
+    </div>
+    <p style="text-align:center; display: none; color: red" id="error_string"></p>
+    {% if message %}
+        <script type="text/javascript">
+        document.getElementById("error_string").textContent = '{{message}}';
+        document.getElementById("error_string").style.display = "block";
+        setTimeout(() => {  document.getElementById("error_string").style.display = "none"; }, 5000);
+
+        </script>
+    {% endif %}
+</form>
+{% endblock %}
