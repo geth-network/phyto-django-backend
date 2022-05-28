@@ -5,9 +5,8 @@ html, body {
 }
 form {
       border: 5px solid #f1f1f1;
-      height: 450px;
+      margin-left: 35vw;
 }
-
 .modal{
   position: fixed; left: 43%;
 }

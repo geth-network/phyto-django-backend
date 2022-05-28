@@ -1,3 +1,5 @@
+{% extends 'phyto_backend/base.html' %}
+
 {% load static %}
 
 {% block content %}
@@ -5,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
 <form method="post">
     <div class="formcontainer">
-        <h2>Registration</h2>
+        <center><h2>Registration</h2></center>
         <hr/>
       <div class="container">
         {% csrf_token %}
