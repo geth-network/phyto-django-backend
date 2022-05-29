@@ -1,0 +1,60 @@
+{% extends 'phyto_backend/base.html' %}
+
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'phyto_backend/segmentation.css' %}">
+<div class="segment-container">
+  <form class="form" method="post" enctype="multipart/form-data" id="myForm">
+    {% csrf_token %}
+    <div class="file-upload-wrapper" data-text="Select your file!">
+      <input name="image" type="file" class="file-upload-field" >
+      <button type="submit">Send</button>
+    </div>
+
+  </form>
+</div>
+<div class="segment-result" id="result">
+
+</div>
+<script>
+   $("form").on("change", ".file-upload-field", function(){
+    $(this).parent(".file-upload-wrapper").attr("data-text", $(this).val().replace(/.*(\/|\\)/, '') );
+});
+$('#myForm')
+    .ajaxForm({
+        type: "POST",
+        url : "{% url 'phyto_backend:segment' %}",
+        dataType : "json",
+        success : function (response) {
+            const myNode = document.getElementById("result");
+            myNode.innerHTML = '';
+
+            var img = new Image();
+            var MAX_WIDTH = 600;
+            var MAX_HEIGHT = 800;
+            img.onload = function(){
+              var width = img.width;
+              var height = img.height;
+
+              // Change the resizing logic
+              if (width > height) {
+                  if (width > MAX_WIDTH) {
+                      height = height * (MAX_WIDTH / width);
+                      width = MAX_WIDTH;
+                  }
+              } else {
+                  if (height > MAX_HEIGHT) {
+                      width = width * (MAX_HEIGHT / height);
+                      height = MAX_HEIGHT;
+                  }
+              }
+              img.width = width;
+              img.height = height;
+              document.getElementById("result").appendChild(img);
+            };
+            img.src = 'data:image/gif;base64,' + response['image-result'];
+        }
+    })
+;
+</script>
+{% endblock %}

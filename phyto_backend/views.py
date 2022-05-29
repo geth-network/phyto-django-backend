@@ -1,3 +1,4 @@
+from base64 import b64encode
 from uuid import uuid4
 
 import dramatiq
@@ -9,10 +10,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.views import LoginView
 from django.views.generic.edit import FormView
+from django.core.files.images import ImageFile
 
 from django_settings.dramatiqconfig import backend
 from .forms import UserAuthenticationForm, UserRegistrationForm
 from .serializers import ImageDataSerializer
+from .models import UserHistory
 
 
 def index(request):
@@ -21,19 +24,28 @@ def index(request):
 
 class SegmentationView(APIView):
 
-    def post(self, request, format=None):
+    def get(self, request):
+        return render(request, template_name="phyto_backend/segmentation.html")
+
+    def post(self, request):
         serializer = ImageDataSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        img = serializer.validated_data.get("image")
+        serializer.save()
+        img = serializer.validated_data.get("image").file
+        # numpy_image = np.array(Image.open(img))
         m = Message(
             message_id=uuid4().hex,
             queue_name=settings.SEGMENTATION_QUEUE,
             actor_name=settings.SEGMENTATION_TASK,
-            args=(img, ), kwargs={}, options={}
+            args=(b64encode(img.getvalue()).decode(), ), kwargs={}, options={}
         )
-        dramatiq.get_broker().enqueue(m)
-        broker_res = m.get_result(backend=backend, block=True)
-        return Response(broker_res)
+       # dramatiq.get_broker().enqueue(m)
+        #broker_res = m.get_result(backend=backend, block=True)
+        # TODO change to broker result
+        instance = UserHistory.objects.get(pk=serializer.instance.pk)
+        instance.result = ImageFile(img, name=instance.image.name)
+        instance.save()
+        return Response({"image-result": b64encode(img.getvalue()).decode()})
 
 
 # класс-контроллер отвечает за логику веб-приложения при взаимодействии
