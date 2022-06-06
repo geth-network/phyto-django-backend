@@ -43,7 +43,7 @@ class SegmentationView(APIView):
             args=(b64encode(img.getvalue()).decode(), ), kwargs={}, options={}
         )
         dramatiq.get_broker().enqueue(m)
-        broker_res = m.get_result(backend=backend, block=True, timeout=60)
+        broker_res = m.get_result(backend=backend, block=True, timeout=3600)
         # TODO change to broker result
         img_bytes = b64decode(broker_res)
         segmentated_img = BytesIO(img_bytes)

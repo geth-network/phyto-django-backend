@@ -3,23 +3,62 @@
 {% load static %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'phyto_backend/segmentation.css' %}">
-<div class="segment-container">
-  <form class="form" method="post" enctype="multipart/form-data" id="myForm">
-    {% csrf_token %}
-    <div class="file-upload-wrapper" data-text="Select your file!">
-      <input name="image" type="file" class="file-upload-field" >
-      <button type="submit">Send</button>
+<form class="form" method="post" enctype="multipart/form-data" id="myForm">
+  {% csrf_token %}
+  <div class="file-upload">
+    <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">CHOOSE NEW IMAGE</button>
+
+    <div class="image-upload-wrap">
+      <input name="image" class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+      <div class="drag-text">
+        <h3>Drag and drop a file or select button "Choose New Image"</h3>
+      </div>
     </div>
-
-  </form>
-</div>
-<div class="segment-result" id="result">
-
-</div>
+    <div class="file-upload-content">
+      <img class="file-upload-image" src="#" />
+      <div class="image-title-wrap">
+        <button type="button" onclick="removeUpload()" class="remove-image">Remove</button> <button type="submit" class="file-send-btn">Segment it!</button>
+      </div>
+    </div>
+    <div class="segment-result" id="result"></div>
+  </div>
+</form>
 <script>
-   $("form").on("change", ".file-upload-field", function(){
-    $(this).parent(".file-upload-wrapper").attr("data-text", $(this).val().replace(/.*(\/|\\)/, '') );
+  function readURL(input) {
+  if (input.files && input.files[0]) {
+
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      $('.image-upload-wrap').hide();
+
+      $('.file-upload-image').attr('src', e.target.result);
+      $('.file-upload-content').show();
+
+      $('.image-title').html(input.files[0].name);
+    };
+
+    reader.readAsDataURL(input.files[0]);
+
+  } else {
+    removeUpload();
+  }
+}
+
+function removeUpload() {
+  $('.file-upload-input').replaceWith($('.file-upload-input').clone());
+  $('.file-upload-content').hide();
+  $('.image-upload-wrap').show();
+  const myNode = document.getElementById("result");
+  myNode.innerHTML = '';
+}
+$('.image-upload-wrap').bind('dragover', function () {
+    $('.image-upload-wrap').addClass('image-dropping');
+  });
+  $('.image-upload-wrap').bind('dragleave', function () {
+    $('.image-upload-wrap').removeClass('image-dropping');
 });
+
 $('#myForm')
     .ajaxForm({
         type: "POST",
@@ -53,8 +92,10 @@ $('#myForm')
               document.getElementById("result").appendChild(img);
             };
             img.src = 'data:image/gif;base64,' + response['image-result'];
+            img.className = "image-segment-result";
         }
     })
 ;
+
 </script>
 {% endblock %}
