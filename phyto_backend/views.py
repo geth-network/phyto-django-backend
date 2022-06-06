@@ -1,16 +1,19 @@
-from base64 import b64encode
+from io import BytesIO
+from base64 import b64encode, b64decode
 from uuid import uuid4
 
+import numpy as np
 import dramatiq
 from dramatiq import Message
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from django.contrib.auth.views import LoginView
 from django.views.generic.edit import FormView
 from django.core.files.images import ImageFile
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from PIL import Image
 
 from django_settings.dramatiqconfig import backend
 from .forms import UserAuthenticationForm, UserRegistrationForm
@@ -39,13 +42,16 @@ class SegmentationView(APIView):
             actor_name=settings.SEGMENTATION_TASK,
             args=(b64encode(img.getvalue()).decode(), ), kwargs={}, options={}
         )
-       # dramatiq.get_broker().enqueue(m)
-        #broker_res = m.get_result(backend=backend, block=True)
+        dramatiq.get_broker().enqueue(m)
+        broker_res = m.get_result(backend=backend, block=True, timeout=60)
         # TODO change to broker result
+        img_bytes = b64decode(broker_res)
+        segmentated_img = BytesIO(img_bytes)
         instance = UserHistory.objects.get(pk=serializer.instance.pk)
-        instance.result = ImageFile(img, name=instance.image.name)
+        instance.result = ImageFile(segmentated_img,
+                                    name=instance.image.name + "_segmentated.png")
         instance.save()
-        return Response({"image-result": b64encode(img.getvalue()).decode()})
+        return Response({"image-result": broker_res})
 
 
 # класс-контроллер отвечает за логику веб-приложения при взаимодействии

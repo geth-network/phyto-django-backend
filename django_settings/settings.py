@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'phyto_feedback',
     'corsheaders',
     'sitetree',
+    'django_extensions',
 
 ]
 
@@ -153,7 +154,7 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-SEGMENTATION_QUEUE = os.getenv("SEGMENTATION_QUEUE", "queue")
+SEGMENTATION_QUEUE = os.getenv("SEGMENTATION_QUEUE", "task_queue")
 SEGMENTATION_TASK = os.getenv("SEMENTATION_TASK", "segment_task")
 
 REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
