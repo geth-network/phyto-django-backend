@@ -6,21 +6,26 @@
 <form class="form" method="post" enctype="multipart/form-data" id="myForm">
   {% csrf_token %}
   <div class="file-upload">
-    <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">CHOOSE NEW IMAGE</button>
+    <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">ВЫБРАТЬ НОВОЕ ИЗОБРАЖЕНИЕ</button>
 
     <div class="image-upload-wrap">
       <input name="image" class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
       <div class="drag-text">
-        <h3>Drag and drop a file or select button "Choose New Image"</h3>
+        <h3>Перетащите файл или нажмите на кнопку "Выбрать новое изображение"</h3>
       </div>
     </div>
     <div class="file-upload-content">
       <img class="file-upload-image" src="#" />
       <div class="image-title-wrap">
-        <button type="button" onclick="removeUpload()" class="remove-image">Remove</button> <button type="submit" class="file-send-btn">Segment it!</button>
+        <button type="button" onclick="removeUpload()" class="remove-image">Удалить</button> <button type="submit" class="file-send-btn">Сегментировать</button>
       </div>
     </div>
     <div class="segment-result" id="result"></div>
+    <br>
+    <div class="segment-result" id="send-email-div" style="display: none;">
+      <input type="text" placeholder="Введите e-mail">
+      <button class="email-send-btn">Отправить</button>
+    </div>
   </div>
 </form>
 <script>
@@ -31,7 +36,7 @@
 
     reader.onload = function(e) {
       $('.image-upload-wrap').hide();
-
+      $('.send-email-div').hide();
       $('.file-upload-image').attr('src', e.target.result);
       $('.file-upload-content').show();
 
@@ -49,6 +54,7 @@ function removeUpload() {
   $('.file-upload-input').replaceWith($('.file-upload-input').clone());
   $('.file-upload-content').hide();
   $('.image-upload-wrap').show();
+  $('.send-email-div').hide();
   const myNode = document.getElementById("result");
   myNode.innerHTML = '';
 }
@@ -93,6 +99,7 @@ $('#myForm')
             };
             img.src = 'data:image/gif;base64,' + response['image-result'];
             img.className = "image-segment-result";
+            document.getElementById("send-email-div").style = "";
         }
     })
 ;

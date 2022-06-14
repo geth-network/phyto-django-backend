@@ -8,41 +8,41 @@ from .models import User
 class UserAuthenticationForm(AuthenticationForm):
     username = UsernameField(
         widget=forms.TextInput(attrs={'autofocus': True,
-                                      'placeholder': 'Username'}),
+                                      'placeholder': 'имя пользователя'}),
         label=''
     )
     password = forms.CharField(
         label='',
         strip=False,
         widget=forms.PasswordInput(attrs={'autocomplete': 'current-password',
-                                          'placeholder': 'Password'}),
+                                          'placeholder': 'пароль'}),
     )
 
 
 class UserRegistrationForm(UserCreationForm):
     username = UsernameField(
         widget=forms.TextInput(attrs={'autofocus': True,
-                                      'placeholder': 'Username'}),
-        label='Username'
+                                      'placeholder': 'имя пользователя'}),
+        label='Имя пользователя'
     )
     first_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'First name'}),
-        label='First Name'
+        widget=forms.TextInput(attrs={'placeholder': 'ваше имя'}),
+        label='Ваше имя'
     )
     last_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Last name'}),
-        label='Last Name'
+        widget=forms.TextInput(attrs={'placeholder': 'ваша фамилия'}),
+        label='Ваша фамилия'
     )
     password1 = forms.CharField(
-        label='Password',
+        label='Пароль',
         strip=False,
         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password',
-                                          'placeholder': 'Password'}),
+                                          'placeholder': 'пароль'}),
     )
     password2 = forms.CharField(
-        label='Confirm Password',
+        label='Подтвердите пароль',
         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password',
-                                          'placeholder': 'Password confirmation'}),
+                                          'placeholder': 'подтвердите пароль'}),
         strip=False,
     )
     field_order = ['username', 'first_name', 'last_name', 'password1',

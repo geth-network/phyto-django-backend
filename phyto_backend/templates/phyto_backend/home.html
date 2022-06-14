@@ -2,13 +2,13 @@
 
 
 {% block content %}
-<div align="center" style="margin-top:20px; font: 100% Arial;"> <h1> Welcome to PHYTO-SEGMENT</h1>
+<div align="center" style="margin-top:20px; font: 100% Arial;"> <h1>ДОБРО ПОЖАЛОВАТЬ НА PHYTO-SEGMENT</h1>
     <br>
     <h2>
         {% if user.is_authenticated %}
-        You was authenticated as <u>{{user.username}}</u>
+        <u>{{user.username}}</u>, добро пожаловать в систему!
         {% else %}
-        You are not authenticated, please <a href="/login">Log in</a>
+        Добро пожаловать. Пожалуйста, <a href="/login">войдите в систему</a>.
         {% endif %}
     </h2>
 </div>

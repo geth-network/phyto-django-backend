@@ -7,13 +7,13 @@
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
 <form method="post">
     <div class="formcontainer">
-        <center><h2>Registration</h2></center>
+        <center><h2>Регистрация</h2></center>
         <hr/>
       <div class="container">
         {% csrf_token %}
           {{ form.as_p }}
       </div>
-        <button type="submit">Registration</button>
+        <button type="submit">Создать аккаунт</button>
     </div>
     <p style="text-align:center; display: none; color: red" id="error_string"></p>
     {% if message %}

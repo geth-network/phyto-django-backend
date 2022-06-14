@@ -8,14 +8,14 @@
 
 <form method="post" style="height: 430px;">
     <div class="formcontainer">
-        <center><h2>Log in</h2></center>
+        <center><h2>Вход в систему</h2></center>
         <hr/>
       <div class="container">
           {% csrf_token %}
           {{ form.as_p }}
       </div>
-        <button type="submit" name="Login">Log in</button><p></p>
-        <center><a href="/signup">Try it Free</a></center>
+        <button type="submit" name="Login">Войти</button><p></p>
+        <center><a href="/signup">Попробовать бесплатно</a></center>
     </div>
 </form>
 {% endblock %}
